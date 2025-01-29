@@ -1,3 +1,4 @@
+import './trace';
 import express, { Request, Response } from 'express';
 import mysql from 'mysql2/promise';
 

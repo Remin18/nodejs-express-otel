@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   app:
     build:
@@ -8,6 +10,7 @@ services:
       DB_USER: root
       DB_PASSWORD: password
       DB_NAME: todo_db
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
     volumes:
       - ./src:/usr/src/app/src
       - ./nodemon.json:/usr/src/app/nodemon.json
@@ -15,6 +18,9 @@ services:
       - ./package-lock.json:/usr/src/app/package-lock.json
     ports:
       - "3000:3000"
+    depends_on:
+      - db
+      - otel-collector
 
   db:
     image: mysql:8.4
@@ -25,6 +31,15 @@ services:
       - "3306:3306"
     volumes:
       - db-data:/var/lib/mysql
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    command: [ "--config=/etc/otel-collector-config.yml" ]
+    volumes:
+      - ./otel-collector-config.yml:/etc/otel-collector-config.yml
+    ports:
+      - "4317:4317"
+      - "55680:55680"
 
 volumes:
   db-data:
