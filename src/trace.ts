@@ -7,14 +7,15 @@ import {
 } from "@opentelemetry/sdk-metrics";
 import { HttpInstrumentation } from "@opentelemetry/instrumentation-http";
 import { ExpressInstrumentation } from "@opentelemetry/instrumentation-express";
-// import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-grpc";
-// import { OTLPMetricExporter } from "@opentelemetry/exporter-metrics-otlp-grpc";
+import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-grpc";
+import { OTLPMetricExporter } from "@opentelemetry/exporter-metrics-otlp-grpc";
 
-// OpenTelemetry の SDK を初期化する
 const sdk = new NodeSDK({
-  traceExporter: new ConsoleSpanExporter(),
+  // traceExporter: new ConsoleSpanExporter(),
+  traceExporter: new OTLPTraceExporter({ url: process.env.OTEL_EXPORTER_OTLP_ENDPOINT }),
   metricReader: new PeriodicExportingMetricReader({
-    exporter: new ConsoleMetricExporter(),
+    // exporter: new ConsoleMetricExporter(),
+    exporter: new OTLPMetricExporter({ url: process.env.OTEL_EXPORTER_OTLP_ENDPOINT }),
   }),
   instrumentations: [
     getNodeAutoInstrumentations(),
@@ -23,5 +24,4 @@ const sdk = new NodeSDK({
   ],
 });
 
-// SDK を起動することで自動で計装が開始される
 sdk.start();
