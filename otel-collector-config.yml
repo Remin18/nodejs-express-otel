@@ -3,8 +3,6 @@ receivers:
     protocols:
       grpc:
         endpoint: 0.0.0.0:4317
-      http:
-        endpoint: 0.0.0.0:4318
 
 processors:
   batch:
@@ -14,8 +12,6 @@ exporters:
     endpoint: https://otlp.nr-data.net:4317
     headers:
       api-key: xxxx
-  debug:
-    verbosity: detailed  # optional: detailed or normal
 
 service:
   pipelines:
