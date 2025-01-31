@@ -10,6 +10,7 @@ services:
       DB_USER: root
       DB_PASSWORD: password
       DB_NAME: todo_db
+      SERVICE_NAME: todo-demo
       OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
     volumes:
       - ./src:/usr/src/app/src
